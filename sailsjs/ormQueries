@@ -1,0 +1,33 @@
+//One to many relationship manage in the sails js.
+
+
+  saveEquipmentToVet: async function(req, res) {
+    let vetUser = null;
+    let existingEquipmentId = [];
+
+    try{
+    logger.info("Adding equipment to vet=")
+    logger.info("Data=", req.body.vetId)
+    const vetId = req.body.vetId;
+    const equipmentData = JSON.parse(req.body.equipmentData) || [];
+    vetUser = await User.findOne({id:vetId}).populate('equipment');
+      vetUser.equipment.forEach(function (tempEquipment) {
+        existingEquipmentId.push(tempEquipment.id)
+      });
+
+     vetUser.equipment.remove(existingEquipmentId);
+      await vetUser.save();
+    vetUser.equipment.add(equipmentData)
+    await vetUser.save();
+      res.json(constant.successCode, {success:true, message: "Data has been successfully saved"})
+    //vetUser.equipment = [];
+    }catch(e) {
+      logger.info("Exception in adding equipment to VET", e);
+      if(existingEquipmentId.length) {
+        vetUser.equipment.add(existingEquipmentId);
+        await vetUser.save();
+      }
+      res.json(constant.internalServerStatusCode, {success:false, message: constant.transactionErrorMessage})
+    }
+  },
+

@@ -1,0 +1,3 @@
+// to populate the select2 again 
+
+$("#equipmentManagementTools").val([123, 123]).trigger('change') // 
