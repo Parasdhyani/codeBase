@@ -1,3 +1,11 @@
 // to populate the select2 again 
 
 $("#equipmentManagementTools").val([123, 123]).trigger('change') // 
+
+// adding days(without moment js) and fetch only ISO date format, 
+  var daysToMove = 365;
+  try {
+    jQuery('#ACORD_InsuranceSvcRq_CommlPkgPolicyQuoteInqRq_CommlPolicy_ContractTerm_ExpirationDt').val(
+      date1.setDate(date1.getDate() + daysToMove).substring(0, 10)
+    );
+
