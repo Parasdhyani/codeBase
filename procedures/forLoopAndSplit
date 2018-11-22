@@ -1,0 +1,43 @@
+// While LOOP
+alter procedure whileLoop
+AS
+	declare @intCounter INT
+BEGIN
+   select @intCounter = 1
+   WHILE(@intCounter <= 10)
+   BEGIN
+	   print 'Yes we are here'
+	   insert into TestWhile(name) values(@intCounter)
+	   select @intCounter = @intCounter +  1
+   END
+
+END
+
+
+
+//Split the text using the 
+
+alter procedure whileLoop
+AS
+	declare @intCounter INT
+BEGIN
+   DECLARE @str = 'monday, tuesday, thursday'
+  WHILE LEN(@str) > 0
+ BEGIN
+    DECLARE @TDay VARCHAR(100)
+    IF CHARINDEX(',',@str) > 0
+        SET  @TDay = SUBSTRING(@str,0,CHARINDEX(',',@str))
+    ELSE
+        BEGIN
+        SET  @TDay = @str
+        SET @str = ''
+        END
+  insert into TestWhile(name) values(@TDay)
+ SET @str = REPLACE(@str,@TDay + ',' , '')
+ END
+END
+
+
+
+
+
