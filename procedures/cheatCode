@@ -1,0 +1,4 @@
+// To get the last added id.
+
+insert into content_page(title, categories_id, teams_id, main_content, broker_id, status, created, updated) values(@title, @categories_id, @teams_id, @main_content, @broker_id, @status, GETDATE(), GETDATE ())
+select @id = @@IDENTITY 
