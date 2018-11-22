@@ -2,3 +2,16 @@
 
 insert into content_page(title, categories_id, teams_id, main_content, broker_id, status, created, updated) values(@title, @categories_id, @teams_id, @main_content, @broker_id, @status, GETDATE(), GETDATE ())
 select @id = @@IDENTITY 
+
+// Fetch the multiple columns using procedures.
+
+alter PROCEDURE checkForQuery
+AS
+BEGIN
+	declare @userId INT
+	declare @password varchar(1000)
+	select @userId = id, @password = password from users where id = 1
+	insert into TestWhile(name) values(@password)
+	select @password
+END
+
