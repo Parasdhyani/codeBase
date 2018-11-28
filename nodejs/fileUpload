@@ -1,0 +1,80 @@
+Upload image Via ajax
+*******************************************************************
+Below snippets of code will be call
+
+ let fd = new FormData();
+        $("#addClientForm").serializeArray().forEach((formData) => {
+            fd.append(formData.name, formData.value);  
+        });
+
+        if($('#brokerLogo').get(0).files[0]) {
+        fd.append("brokerLogo", $('#brokerLogo').get(0).files[0]);
+        }
+        
+*******************************************************************
+uploadImageAjax: function(url, formData, successCallBack, errorCallBack) {
+        mainPage.showSpinner();
+        $.ajax({
+            url: url ,
+            type: "POST",
+            data: formData,
+            enctype: "multipart/form-data",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (data) {
+                successCallBack(data);
+                mainPage.hideSpinner();
+            },
+            error: errorCallBack,
+        });
+      }
+      
+      *******************************************************************
+      Server Side code for image upload:
+      const formidable = require('formidable');
+      
+      var form = new formidable.IncomingForm();
+      
+      form.parse(req, function(err, fields, files) {
+      formData = fields; // This will contains all the fields that has come along with the Post request
+      let fileObject = files['brokerLogo']; // This will contain the actual streams and details of the file has been uploaded.
+      fileName = fileObject.name;
+     tempPath = fileObject.path;
+
+     //The upliad file will created on the temp folder by plugin. So we have  to copy the file from tmp to our actual folder.
+      brokerFilePath += fileName;
+     console.log('newBrokerFilePath==', brokerFilePath);
+      console.log('tempPath==', tempPath);
+      //fsextra =  require('fs-extra');
+     fsextra.copySync(tempPath, brokerFilePath);
+
+      
+      }
+      
+      
+      
+      **************************************************************************************
+      Code for creating the directory with read access
+      exports.mkdir_p = function(path, callback) {
+  process.umask(0);
+  fs.mkdir(path, { recursive: true }, err => {
+    if (err) {
+      console.log('creating make dir==', err);
+      throw err;
+    }
+    callback();
+  });
+};
+
+      **************************************************************************************
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
