@@ -1,0 +1,119 @@
+**********************************************************************************
+
+//To load the image(Via the url) using ajax call.
+
+ var xhr = new XMLHttpRequest();  // here we are making ajax request
+    xhr.open("GET", $("#clientUploadImage").attr("brokerlogo"));  // showing broker logo
+ //although we can get the remote data directly into an arraybuffer using the string "arraybuffer" assigned to responseType property. For the sake of example we are putting it into a blob and then copying the blob data into an arraybuffer.
+   xhr.responseType = "blob"; 
+   xhr.onload = function() {
+    analyze_data(xhr.response);
+}
+
+xhr.send();
+
+function analyze_data(blob) { // will get the blob of the image
+    var myReader = new FileReader(); // we will use the file reader to convert the  blob value into the Array buffer.
+    myReader.readAsDataURL(blob) 
+    myReader.addEventListener("loadend", function(e)
+    {
+        var buffer = e.srcElement.result;//arraybuffer object
+       $('.image-upload-wrap').hide();
+       $('.file-upload-image').attr('src', buffer);
+       $('.file-upload-content').show();
+    });
+   }
+   
+   
+   **********************************************************************************
+   
+   To create an action that will read the image from the file system and expose as an URL
+   
+   
+exports.showUserImage = function(req, res) {
+  let imagePath = req.query.imagePath;
+  fs.readFile(imagePath, function(err, data) {
+    //  res.setHeader('content-type', 'image/jpeg');
+    res.writeHead(200, { 'Content-Type': 'image/jpeg' });
+    res.end(data); // Send the file data to the browser.
+    //res.status(200).send(data);
+  });
+};
+
+ **********************************************************************************
+ 
+ 
+Upload image Via ajax
+*******************************************************************
+Below snippets of code will be call
+
+ let fd = new FormData();
+        $("#addClientForm").serializeArray().forEach((formData) => {
+            fd.append(formData.name, formData.value);  
+        });
+
+        if($('#brokerLogo').get(0).files[0]) {
+        fd.append("brokerLogo", $('#brokerLogo').get(0).files[0]);
+        }
+        
+*******************************************************************
+uploadImageAjax: function(url, formData, successCallBack, errorCallBack) {
+        mainPage.showSpinner();
+        $.ajax({
+            url: url ,
+            type: "POST",
+            data: formData,
+            enctype: "multipart/form-data",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (data) {
+                successCallBack(data);
+                mainPage.hideSpinner();
+            },
+            error: errorCallBack,
+        });
+      }
+      
+      *******************************************************************
+      Server Side code for image upload:
+      const formidable = require('formidable');
+      
+      var form = new formidable.IncomingForm();
+      
+      form.parse(req, function(err, fields, files) {
+      formData = fields; // This will contains all the fields that has come along with the Post request
+      let fileObject = files['brokerLogo']; // This will contain the actual streams and details of the file has been uploaded.
+      fileName = fileObject.name;
+     tempPath = fileObject.path;
+
+     //The upliad file will created on the temp folder by plugin. So we have  to copy the file from tmp to our actual folder.
+      brokerFilePath += fileName;
+     console.log('newBrokerFilePath==', brokerFilePath);
+      console.log('tempPath==', tempPath);
+      //fsextra =  require('fs-extra');
+     fsextra.copySync(tempPath, brokerFilePath);
+
+      
+      }
+      
+      
+      
+      **************************************************************************************
+      Code for creating the directory with read access
+      exports.mkdir_p = function(path, callback) {
+  process.umask(0);
+  fs.mkdir(path, { recursive: true }, err => {
+    if (err) {
+      console.log('creating make dir==', err);
+      throw err;
+    }
+    callback();
+  });
+};
+
+      **************************************************************************************
+
+   
+   
+   
