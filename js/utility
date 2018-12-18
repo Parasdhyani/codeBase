@@ -8,4 +8,9 @@ $("#equipmentManagementTools").val([123, 123]).trigger('change') //
     jQuery('#ACORD_InsuranceSvcRq_CommlPkgPolicyQuoteInqRq_CommlPolicy_ContractTerm_ExpirationDt').val(
       date1.setDate(date1.getDate() + daysToMove).substring(0, 10)
     );
+    
+    
+    // To remove the closet the component using jquery.
+    
+     $(this).closest('.serializeComponent').remove();
 
