@@ -13,4 +13,7 @@ $("#equipmentManagementTools").val([123, 123]).trigger('change') //
     // To remove the closet the component using jquery.
     
      $(this).closest('.serializeComponent').remove();
+     
+     //To bind the onClick event on the class. This will also bind the document on the future events.
+     $(document).on('click', ".fa-plus-circle", function() {
 
