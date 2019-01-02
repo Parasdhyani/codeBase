@@ -16,4 +16,7 @@ $("#equipmentManagementTools").val([123, 123]).trigger('change') //
      
      //To bind the onClick event on the class. This will also bind the document on the future events.
      $(document).on('click', ".fa-plus-circle", function() {
+     
+     //This will select the selected checkbox:::
+     $('.theClass:checkbox:checked')
 
