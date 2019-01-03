@@ -1,0 +1,3 @@
+As there is difficult to use the limit in the mssql, you can use the below query to fetch and update one query on this.
+
+update users set password = 'test@12345' where id = (select  id from users order by id OFFSET 1 ROWS FETCH NEXT 1 ROWS ONLY)
