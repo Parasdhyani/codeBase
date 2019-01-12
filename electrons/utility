@@ -1,0 +1,3 @@
+// This will fix the issue, when you will be having the issue of the sudo access
+sudo npm install -g electron --unsafe-perm=true --allow-root
+
